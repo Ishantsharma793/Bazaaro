@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bazaaro – Shopping App</title>
+<style>
+:root{--bg:#eeeeee;--card:#ffffff;--ink:#222222;--mute:#6e6e6e;--pri:#4a4a4a;--onpri:#ffffff;--acc:#bdbdbd;--line:#dcdcdc;--ok:#4a4a4a;--chip:#e4e4e4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1a1a;--card:#262626;--ink:#eeeeee;--mute:#a0a0a0;--pri:#d0d0d0;--onpri:#1a1a1a;--line:#3a3a3a;--ok:#cfcfcf;--chip:#333333}}
+:root[data-theme="dark"]{--bg:#1a1a1a;--card:#262626;--ink:#eeeeee;--mute:#a0a0a0;--pri:#d0d0d0;--onpri:#1a1a1a;--line:#3a3a3a;--ok:#cfcfcf;--chip:#333333}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:84px;max-width:560px;margin:0 auto}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--pri);color:var(--onpri);position:sticky;top:0;z-index:4;margin-bottom:12px}
+.av{width:40px;height:40px;border-radius:50%;border:2px solid var(--onpri);background:var(--chip) center/cover;color:var(--ink);font-size:10px;padding:0}
+.img img{width:100%;height:100%;object-fit:cover;display:block}
+.pm{display:none;position:fixed;top:calc(64px + env(safe-area-inset-top,0px));right:12px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;min-width:200px;z-index:8;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.pm button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:14px 16px;font-size:15px}
+.pm button+button{border-top:1px solid var(--line)}
+.pm .sm{color:var(--mute);font-size:13px}
+.ph{font-size:13px;font-weight:700;color:var(--mute);padding:10px;text-align:center}
+.pill{display:inline-block;background:var(--pri);color:var(--onpri);border-radius:6px;padding:1px 7px;font-weight:700;font-size:12px}
+.logo{font-size:24px;font-weight:800;color:var(--onpri);letter-spacing:-.5px}
+.tag{font-size:12px;color:var(--onpri);opacity:.8}
+.cartbtn{position:relative;background:var(--card);color:var(--ink);border:0;border-radius:10px;padding:10px 16px;font-size:14px;font-weight:700}
+.badge{position:absolute;top:-6px;right:-6px;background:var(--acc);color:#1a1a1a;font-size:12px;font-weight:700;border-radius:10px;min-width:20px;padding:2px 5px;text-align:center}
+.bar{display:flex;gap:8px;padding:0 16px 12px}
+.bar input{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px 14px;font-size:16px}
+.bar select{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:0 8px;font-size:14px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:0 16px 12px}
+.chip{border:0;background:var(--chip);border-radius:20px;padding:9px 16px;white-space:nowrap;font-size:14px}
+.chip.on{background:var(--pri);color:var(--onpri);font-weight:600}
+.banner{margin:4px 16px 16px;padding:20px;border-radius:18px;background:var(--pri);color:var(--onpri)}
+.banner h2{font-size:21px;margin-bottom:4px}.banner p{font-size:14px;opacity:.9}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;min-width:0}
+.img{position:relative;background:var(--chip);border-radius:12px;height:150px;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.off{position:absolute;left:8px;top:8px;background:var(--ok);color:#fff;font-size:11px;font-weight:700;border-radius:8px;padding:2px 7px}
+.heart{position:absolute;right:6px;top:6px;border:0;background:transparent;font-size:20px;padding:4px}
+.card h3{font-size:14px;font-weight:600;min-height:36px;margin-bottom:4px}
+.rate{font-size:12px;color:var(--mute);margin-bottom:6px}
+.price{font-size:18px;font-weight:800;margin-bottom:10px}.price s{font-size:12px;font-weight:400;color:var(--mute);margin-left:6px}
+.add{margin-top:auto;width:100%;border:0;border-radius:10px;padding:10px;background:var(--pri);color:var(--onpri);font-weight:600;font-size:14px}
+.qty{margin-top:auto;display:flex;align-items:center;justify-content:space-between;background:var(--chip);border-radius:10px}
+.qty button{border:0;background:transparent;font-size:20px;width:40px;height:38px}
+.qty b{font-size:15px}
+.none{grid-column:1/-1;text-align:center;color:var(--mute);padding:30px 0}
+#cart,#shop{display:none;padding:0 16px}
+#shop h2{font-size:20px;margin:6px 0 12px}
+.form{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:16px}
+.lb{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
+.fi{width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px;font-size:15px}
+#cart h2{font-size:20px;margin:6px 0 12px}
+.row{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;display:flex;gap:12px;align-items:center}
+.row .e{width:56px;height:56px;flex:none;border-radius:10px;overflow:hidden;background:var(--chip)}.row .e img{width:100%;height:100%;object-fit:cover;display:block}.row .m{flex:1;min-width:0}.row .m p{font-size:14px;font-weight:600}.row .m span{font-size:13px;color:var(--mute)}
+.rm{border:0;background:transparent;color:var(--mute);font-size:13px;margin-top:4px;padding:0;text-decoration:underline}
+.prog{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px;font-size:13px}
+.track{height:8px;background:var(--chip);border-radius:6px;margin-top:8px;overflow:hidden}
+.fill{height:100%;background:var(--ok);border-radius:6px;transition:width .3s}
+.coupon{display:flex;gap:8px;margin-bottom:12px}
+.coupon input{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px;font-size:15px;text-transform:uppercase}
+.coupon button{border:0;border-radius:12px;background:var(--chip);padding:0 18px;font-weight:600}
+.bill{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:14px}
+.bill div{display:flex;justify-content:space-between;margin-bottom:8px}
+.bill .t{font-size:18px;font-weight:800;margin:6px 0 0;padding-top:10px;border-top:1px dashed var(--line)}
+.ok{color:var(--ok)}
+.pay{width:100%;border:0;border-radius:12px;background:var(--pri);color:var(--onpri);padding:15px;font-size:16px;font-weight:700;margin-top:14px}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:560px;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px))}
+nav button{border:0;background:transparent;font-size:11px;padding:7px 5px;border-radius:10px;color:var(--mute);flex:1;min-width:0;white-space:nowrap}
+nav button.on{color:var(--pri);font-weight:700;background:var(--chip)}
+.page{display:none;padding:0 16px}
+.page h2{font-size:20px;margin:6px 0 12px}
+.order-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.order-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px}
+.status-pill{display:inline-block;background:var(--chip);border-radius:20px;padding:5px 9px;font-size:12px;font-weight:700}
+.steps{display:flex;justify-content:space-between;gap:4px;margin:16px 0 8px}
+.step{flex:1;text-align:center;font-size:10px;color:var(--mute)}
+.step-dot{width:13px;height:13px;border-radius:50%;background:var(--chip);border:2px solid var(--line);margin:0 auto 5px}
+.step.done .step-dot{background:var(--pri);border-color:var(--pri)}
+.track-line{height:5px;background:var(--chip);border-radius:5px;overflow:hidden;margin:8px 0 12px}
+.track-line span{display:block;height:100%;background:var(--pri);transition:width .25s}
+.small-action{border:1px solid var(--line);background:var(--chip);border-radius:9px;padding:9px 12px;font-size:13px;font-weight:600;margin-top:8px}
+#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:5;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%)}
+#done{position:fixed;inset:0;background:rgba(10,10,25,.7);display:none;align-items:center;justify-content:center;padding:24px;z-index:9}
+#done div{background:var(--card);border-radius:20px;padding:28px 22px;text-align:center;max-width:340px}
+#done h2{margin:8px 0}#done p{color:var(--mute);font-size:14px;line-height:1.5;margin-bottom:16px}
+</style>
+</head>
+<body>
+<header><div><div class="logo">Bazaaro</div><div class="tag">Sab kuch, ek jagah</div></div>
+<div style="display:flex;gap:12px;align-items:center"><button class="av" id="av" onclick="menu()" aria-label="Profile menu">Photo</button><input id="pfp" type="file" accept="image/*" hidden onchange="setAv(this.files[0])"><div class="pm" id="pm"><button onclick="document.getElementById('pfp').click();menu()">Photo badlo</button><button onclick="go('home');menu()">Home</button><button class="sm" onclick="go('shop');menu()">Dukaandaar (apni dukaan)</button></div><button class="cartbtn" onclick="go('cart')" aria-label="Cart kholo">Cart<span class="badge" id="cnt">0</span></button></div></header>
+
+<main id="home">
+<div class="bar"><input id="q" type="search" placeholder="Product khojo..." oninput="draw()">
+<select id="sort" onchange="draw()" aria-label="Sort"><option value="">Sort</option><option value="lo">Sasta pehle</option><option value="hi">Mehnga pehle</option><option value="rt">Best rating</option></select></div>
+<div class="chips" id="chips"></div>
+<div class="banner"><h2>₹999 se upar free delivery</h2><p>Coupon BAZAAR10 lagao, 10% extra bachao</p></div>
+<div class="grid" id="grid"></div>
+</main>
+
+<section id="cart"></section>
+<section id="shop"></section>
+<section id="orders" class="page"></section>
+<section id="track" class="page"></section>
+
+<nav>
+<button id="n-home" class="on" onclick="go('home')">⌂<br>Home</button>
+<button id="n-cart" onclick="go('cart')">🛒<br>Cart</button>
+<button id="n-orders" onclick="go('orders')">▤<br>My Orders</button>
+<button id="n-track" onclick="go('track')">📦<br>Track Parcel</button>
+<button id="n-shop" onclick="go('shop')">🏪<br>Seller</button>
+</nav>
+<div id="toast"></div>
+<div id="done"><div><h2>Order ho gaya!</h2><p id="oid"></p><button class="pay" style="margin:0" onclick="closeDone()">Aur shopping karo</button></div></div>
+
+<script>
+const P=[
+{id:1,n:"Wireless Headphones",p:799,o:1499,r:4.4,c:"Electronics",e:"🎧"},
+{id:2,n:"Smart Watch",p:1299,o:2499,r:4.2,c:"Electronics",e:"⌚"},
+{id:3,n:"Running Shoes",p:999,o:1799,r:4.5,c:"Fashion",e:"👟"},
+{id:4,n:"Cotton T-Shirt",p:399,o:699,r:4.1,c:"Fashion",e:"👕"},
+{id:5,n:"Travel Backpack",p:699,o:1199,r:4.3,c:"Accessories",e:"🎒"},
+{id:6,n:"Table Lamp",p:499,o:799,r:4.0,c:"Home",e:"💡"},
+{id:7,n:"Bluetooth Speaker",p:899,o:1599,r:4.4,c:"Electronics",e:"🔊"},
+{id:8,n:"Sunglasses",p:349,o:699,r:4.0,c:"Accessories",e:"🕶️"},
+{id:9,n:"Denim Jacket",p:1499,o:2499,r:4.3,c:"Fashion",e:"🧥"},
+{id:10,n:"Water Bottle",p:249,o:399,r:4.6,c:"Home",e:"🧴"},
+{id:11,n:"Wall Clock",p:449,o:799,r:4.2,c:"Home",e:"🕰️"},
+{id:12,n:"Power Bank",p:749,o:1299,r:4.5,c:"Electronics",e:"🔋"}];
+const CATS=["All","♥ Saved","Electronics","Fashion","Accessories","Home"];
+let cat="All",cart={},saved=[],coupon=false,view="home",SELL=[],shopName="",ORD=[],selectedOrderId=null;
+const ORDER_STEPS=["Order Placed","Packed","Shipped","Out for Delivery","Delivered"];
+const $=id=>document.getElementById(id);
+try{const s=JSON.parse(localStorage.getItem("bz")||"{}");cart=s.cart||{};saved=s.saved||[];coupon=!!s.coupon}catch(e){}
+try{const z=JSON.parse(localStorage.getItem("bzs")||"{}");SELL=z.items||[];shopName=z.shop||""}catch(e){}
+try{ORD=JSON.parse(localStorage.getItem("bzo")||"[]")}catch(e){}
+SELL.forEach(x=>P.push(x));Object.keys(cart).forEach(k=>{if(!P.find(p=>p.id==k))delete cart[k]});
+function save(){try{localStorage.setItem("bz",JSON.stringify({cart,saved,coupon}))}catch(e){}}
+function toast(t){const x=$("toast");x.textContent=t;x.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(()=>x.classList.remove("show"),1600)}
+function chips(){$("chips").innerHTML=CATS.map(c=>`<button class="chip ${c===cat?"on":""}" onclick="setCat('${c}')">${c}</button>`).join("")}
+function setCat(c){cat=c;chips();draw()}
+function draw(){
+ const q=$("q").value.toLowerCase(),s=$("sort").value;
+ let l=P.filter(p=>(cat==="All"||(cat==="♥ Saved"?saved.includes(p.id):p.c===cat))&&p.n.toLowerCase().includes(q));
+ if(s==="lo")l.sort((a,b)=>a.p-b.p);if(s==="hi")l.sort((a,b)=>b.p-a.p);if(s==="rt")l.sort((a,b)=>b.r-a.r);
+ $("grid").innerHTML=l.length?l.map(p=>{const n=cart[p.id]||0,d=Math.round((1-p.p/p.o)*100);
+ return `<div class="card"><div class="img">${d>0?`<span class="off">${d}% off</span>`:""}<button class="heart" onclick="fav(${p.id})" aria-label="Save">${saved.includes(p.id)?"♥":"♡"}</button>${p.img?`<img src="${p.img}" alt="${p.n}">`:`<span class="ph">${p.n}</span>`}</div><h3>${p.n}</h3><div class="rate">${p.shop?p.shop:`<span class="pill">${p.r} ★</span>`}</div><div class="price">₹${p.p}${p.o>p.p?`<s>₹${p.o}</s>`:""}</div>${n?`<div class="qty"><button onclick="chg(${p.id},-1)" aria-label="Kam karo">−</button><b>${n}</b><button onclick="chg(${p.id},1)" aria-label="Badhao">+</button></div>`:`<button class="add" onclick="chg(${p.id},1)">Add to Cart</button>`}</div>`}).join(""):`<p class="none">Kuch nahi mila. Doosra naam try karo.</p>`}
+function fav(id){const i=saved.indexOf(id);i<0?(saved.push(id),toast("Saved mein add hua")):saved.splice(i,1);save();draw()}
+function chg(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];if(d>0)toast("Cart mein add hua");save();upd()}
+function totals(){const sub=Object.keys(cart).reduce((s,k)=>s+P.find(p=>p.id==k).p*cart[k],0);
+ const disc=coupon?Math.round(sub*.1):0,ship=sub===0||sub>=999?0:49;return{sub,disc,ship,tot:sub-disc+ship}}
+function upd(){$("cnt").textContent=Object.values(cart).reduce((a,b)=>a+b,0);draw();if(view==="cart")drawCart()}
+function drawCart(){
+ const ids=Object.keys(cart),t=totals();
+ if(!ids.length){$("cart").innerHTML=`<h2>Mera Cart</h2><p class="none" style="padding:40px 0">Cart khaali hai. Kuch pasand karo!</p>`;return}
+ const left=999-t.sub,pc=Math.min(100,t.sub/999*100);
+ $("cart").innerHTML=`<h2>Mera Cart</h2>
+ <div class="prog">${left>0?`Aur ₹${left} ka saman lo, delivery free!`:`<span class="ok"><b>Free delivery</b> mil gayi</span>`}<div class="track"><div class="fill" style="width:${pc}%"></div></div></div>
+ ${ids.map(k=>{const p=P.find(x=>x.id==k);return `<div class="row"><div class="e">${p.img?`<img src="${p.img}" alt="">`:""}</div><div class="m"><p>${p.n}</p><span>₹${p.p} × ${cart[k]} = ₹${p.p*cart[k]}</span><br><button class="rm" onclick="del(${p.id})">Hatao</button></div><div class="qty" style="margin:0;width:112px"><button onclick="chg(${p.id},-1)" aria-label="Kam karo">−</button><b>${cart[k]}</b><button onclick="chg(${p.id},1)" aria-label="Badhao">+</button></div></div>`}).join("")}
+ <div class="coupon"><input id="cp" placeholder="Coupon code" value="${coupon?"BAZAAR10":""}"><button onclick="applyCp()">Lagao</button></div>
+ <div class="bill"><div><span>Subtotal</span><span>₹${t.sub}</span></div>${coupon?`<div class="ok"><span>Coupon (10%)</span><span>−₹${t.disc}</span></div>`:""}<div><span>Delivery</span><span class="${t.ship?"":"ok"}">${t.ship?"₹"+t.ship:"Free"}</span></div><div class="t"><span>Total</span><span>₹${t.tot}</span></div></div>
+ <button class="pay" onclick="order()">Order karo · ₹${t.tot}</button>`}
+function del(id){delete cart[id];save();upd()}
+function applyCp(){const v=$("cp").value.trim().toUpperCase();if(v==="BAZAAR10"){coupon=true;toast("Coupon lag gaya!")}else{coupon=false;toast("Galat coupon code")}save();drawCart()}
+function order(){const t=totals();const placed={id:"BZ"+Math.floor(10000+Math.random()*89999),t:t.tot,st:0,created:new Date().toLocaleString("en-IN"),it:Object.keys(cart).map(k=>{const p=P.find(x=>x.id==k);return{n:p.n,q:cart[k],p:p.p,s:p.shop||"Bazaaro"}})};ORD.unshift(placed);selectedOrderId=placed.id;try{localStorage.setItem("bzo",JSON.stringify(ORD))}catch(e){}$("oid").innerHTML=`Order #${placed.id}<br>Total ₹${t.tot}<br><small>Demo order: payment/dispatch abhi live nahi hai.</small>`;$("done").style.display="flex";cart={};coupon=false;save();upd()}
+function closeDone(){$("done").style.display="none";go("home")}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function saveSell(){try{localStorage.setItem("bzs",JSON.stringify({items:SELL,shop:shopName}))}catch(e){}}
+function mh(){$("mh").textContent="Meri dukaan ke products ("+SELL.length+")"}
+function drawShop(){
+ $("shop").innerHTML=`<h2>Seller / Dukaandaar Panel</h2><p style="font-size:13px;color:var(--mute);margin:-4px 0 12px">Apni dukaan ka naam aur product details bharkar product Bazaaro par dikhayein. Customer ke orders yahin manage karein.</p><div class="form">
+ <label class="lb" for="sn">Dukaan ka naam</label><input class="fi" id="sn" placeholder="Jaise: Sharma Electronics" value="${esc(shopName)}" maxlength="30">
+ <label class="lb" for="pn">Product ka naam</label><input class="fi" id="pn" placeholder="Jaise: Steel Tiffin" maxlength="40">
+ <label class="lb" for="pp">Keemat (₹)</label><input class="fi" id="pp" type="number" inputmode="numeric" min="1" placeholder="299">
+ <label class="lb" for="pc">Category</label><select class="fi" id="pc">${CATS.slice(2).map(c=>`<option>${c}</option>`).join("")}</select>
+ <label class="lb" for="pf">Product ki photo</label><input class="fi" id="pf" type="file" accept="image/*">
+ <button class="pay" onclick="addProd()">Product jodo</button></div>
+ <h2 id="mh"></h2><div id="mine"></div><h2>Aaye hue orders (${ORD.length})</h2><div id="ords"></div>`;mh();drawMine();drawOrds()}
+function drawMine(){$("mine").innerHTML=SELL.length?SELL.map(p=>`<div class="row"><div class="e">${p.img?`<img src="${p.img}" alt="">`:""}</div><div class="m"><p>${p.n}</p><span>₹${p.p} · ${p.c}</span><br><button class="rm" onclick="delProd(${p.id})">Hatao</button></div></div>`).join(""):`<p class="none" style="padding:20px 0">Abhi koi product nahi. Upar se pehla product jodo.</p>`}
+function statusName(st){return ORDER_STEPS[Math.max(0,Math.min(4,Number(st)||0))]}
+function trackingMarkup(o){
+ const st=Math.max(0,Math.min(4,Number(o.st)||0));
+ return `<div class="order-card">
+   <div class="order-head"><b>Order #${o.id}</b><span class="status-pill">${statusName(st)}</span></div>
+   <p style="font-size:13px;color:var(--mute)">Total: ₹${o.t} · ${o.created||"Order details saved"}</p>
+   <div class="track-line"><span style="width:${st*25}%"></span></div>
+   <div class="steps">${ORDER_STEPS.map((label,i)=>`<div class="step ${i<=st?"done":""}"><div class="step-dot"></div>${label}</div>`).join("")}</div>
+   <p style="font-size:13px;margin-top:10px">${o.it.map(x=>`${x.n} × ${x.q}`).join(", ")}</p>
+ </div>`;
+}
+function drawOrders(){
+ $("orders").innerHTML=`<h2>My Orders</h2>`+(ORD.length?ORD.map(o=>`
+  <div class="order-card">
+   <div class="order-head"><b>Order #${o.id}</b><span class="status-pill">${statusName(o.st)}</span></div>
+   <p style="font-size:13px;color:var(--mute)">Total ₹${o.t} · ${o.created||"Order saved"}</p>
+   <p style="font-size:13px;margin-top:8px">${o.it.map(x=>x.n+" ×"+x.q).join(", ")}</p>
+   <button class="small-action" onclick="trackOrder('${o.id}')">My Order Tracker / Track Parcel</button>
+  </div>`).join(""):`<p class="none">Abhi koi order nahi hai. Shopping shuru karo!</p>`);
+}
+function trackOrder(id){selectedOrderId=id;go("track")}
+function drawTrack(){
+ const o=ORD.find(x=>x.id===selectedOrderId)||ORD[0];
+ $("track").innerHTML=`<h2>My Order Tracker</h2>`+(o?trackingMarkup(o)+`<p style="font-size:13px;color:var(--mute);margin:8px 2px">Parcel status dukandaar ke update karne par badlega.</p>`:`<p class="none">Abhi track karne ke liye koi parcel nahi hai. Order place karne ke baad yahan tracking dikhegi.</p>`);
+}
+function drawOrds(){$("ords").innerHTML=ORD.length?ORD.map((o,i)=>`<div class="row"><div class="m"><p>#${o.id} · ₹${o.t}</p><span>${o.it.map(x=>x.n+" ×"+x.q+" ("+x.s+")").join(", ")}</span><br><span class="status-pill">${statusName(o.st)}</span><br><button class="rm" onclick="setOrd(${i})">${Number(o.st)>=4?"Delivered ✓":"Next status update karo"}</button></div></div>`).join(""):`<p class="none" style="padding:20px 0">Abhi koi order nahi aaya.</p>`}
+function setOrd(i){ORD[i].st=Math.min(4,(Number(ORD[i].st)||0)+1);try{localStorage.setItem("bzo",JSON.stringify(ORD))}catch(e){}drawOrds();if(view==="orders")drawOrders();if(view==="track")drawTrack();toast("Order status: "+statusName(ORD[i].st))}
+function rd(f,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,600/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.7))};im.src=r.result};r.readAsDataURL(f)}
+function menu(){const m=$("pm");m.style.display=m.style.display==="block"?"none":"block"}
+document.addEventListener("click",e=>{if(!e.target.closest("#pm,#av"))$("pm").style.display="none"});
+function setAv(f){if(f)rd(f,d=>{try{localStorage.setItem("bzp",d)}catch(e){}showAv(d)})}
+function showAv(d){const a=$("av");if(d){a.style.backgroundImage="url("+d+")";a.textContent=""}}
+function addProd(){const f=$("pf").files[0];if(!f){toast("Product ki photo chuno");return}rd(f,img=>addProd2(img))}
+function addProd2(img){const sn=$("sn").value.trim(),n=$("pn").value.trim(),pr=Math.round(+$("pp").value);
+ if(!sn||!n||!(pr>0)){toast("Dukaan, naam aur keemat bharo");return}
+ shopName=sn;const p={id:1000+Date.now()%1e9+SELL.length,n:esc(n),p:pr,o:pr,r:0,c:$("pc").value,img,shop:esc(sn)};
+ SELL.push(p);P.push(p);saveSell();toast("Product store mein dikh raha hai");
+ $("pn").value="";$("pp").value="";$("pf").value="";mh();drawMine();upd()}
+function delProd(id){SELL=SELL.filter(p=>p.id!==id);const i=P.findIndex(p=>p.id===id);if(i>=0)P.splice(i,1);delete cart[id];saved=saved.filter(x=>x!==id);save();saveSell();mh();drawMine();upd()}
+function go(v){view=v;["home","cart","shop","orders","track"].forEach(k=>{$(k).style.display=k===v?(k==="home"||k==="cart"||k==="shop"?"block":"block"):"none";const b=$("n-"+k);if(b)b.classList.toggle("on",k===v)});if(v==="cart")drawCart();if(v==="shop")drawShop();if(v==="orders")drawOrders();if(v==="track")drawTrack();scrollTo(0,0)}
+chips();upd();try{showAv(localStorage.getItem("bzp"))}catch(e){}
+</script>
+</body>
+</html>
